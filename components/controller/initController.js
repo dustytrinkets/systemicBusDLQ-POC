@@ -9,9 +9,13 @@ module.exports = () => {
 		const subscribeToDlq = await bus.subscribeToDlq(onError, onStop);
 		let m, n, o, q = 1;
 
+		const publishContents = async () =>{
+			n = 1;
+			await bus.publish('particleCreated')(body);
+		}
 	
 		const processDefaultHandler = async message => {
-			console.log('Default. ', m);
+			console.log('Subscription ', m);
 			m++;
 		};
 
@@ -20,17 +24,12 @@ module.exports = () => {
 		}
 
 		const processDefaultDlqHandler = async message => {
-			console.log('Default dlq ', n);
+			console.log('Subscription sent to dlq ', n);
 			n++;
 		};
 
 		const subscribeToTopicDlq = () =>{		
 			subscribeToDlq('defaultSubscription', processDefaultDlqHandler);
-		}
-
-		const publishContents = async () =>{
-			n = 1;
-			await bus.publish('particleCreated')(body);
 		}
 
 		const processDlqHandler = async message => {
