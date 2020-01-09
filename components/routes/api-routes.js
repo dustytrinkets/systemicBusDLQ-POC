@@ -2,18 +2,36 @@ const { handleError, tagError } = require('../../lib/errors/errorHandler');
 
 module.exports = () => {
 	const start = async ({ app, controller, logger }) => {
-		app.post('/subscribe', async (req, res, next) => {
+		app.post('/subscribe-dlq', async (req, res, next) => {
 			try {
-				const result = await controller.subscribeToTopic();
+				const result = await controller.subscribeDlq();
 				return res.json(result);
 			} catch (error) {
 				return next(tagError(error));
 			}
 		});
 
-		app.post('/subscribedlq', async (req, res, next) => {
+		app.post('/subscribe-retry', async (req, res, next) => {
 			try {
-				const result = await controller.subscribeToTopicDlq();
+				const result = await controller.subscribeRetry();
+				return res.json(result);
+			} catch (error) {
+				return next(tagError(error));
+			}
+		});
+
+		app.post('/subscribe-retry-recover', async (req, res, next) => {
+			try {
+				const result = await controller.subscribeRetryRecover();
+				return res.json(result);
+			} catch (error) {
+				return next(tagError(error));
+			}
+		});
+
+		app.post('/subscribe-eb', async (req, res, next) => {
+			try {
+				const result = await controller.subscribeExponentialBackoff();
 				return res.json(result);
 			} catch (error) {
 				return next(tagError(error));
@@ -32,7 +50,7 @@ module.exports = () => {
 		app.post('/peek', async (req, res, next) => {
 			try {
 				const result = await controller.peek();
-				return res.json(result);
+				return res.json({ messageCount: result.length, messages: result });
 			} catch (error) {
 				return next(tagError(error));
 			}
@@ -41,7 +59,7 @@ module.exports = () => {
 		app.post('/peekdlq', async (req, res, next) => {
 			try {
 				const result = await controller.peekDlq();
-				return res.json(result);
+				return res.json({ messageCount: result.length, messages: result });
 			} catch (error) {
 				return next(tagError(error));
 			}

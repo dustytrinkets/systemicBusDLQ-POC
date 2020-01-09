@@ -13,19 +13,19 @@ const deadLetterTopicName = TopicClient.getDeadLetterTopicPath(topicName);
 // Send repaired message back to the current queue / topic
 const fixAndResendMessage = async oldMessage => {
 	const queueClient = sbClient.createTopicClient(topicName);
-	const sender = queueClient.createSender();
+	const publisher = queueClient.createSender();
 
 	// Inspect given message and make any changes if necessary
 	const repairedMessage = oldMessage.clone();
 
 	console.log('>>>>> Cloning the message from DLQ and resending it - ', oldMessage.body);
 
-	await sender.send(repairedMessage);
+	await publisher.send(repairedMessage);
 	await queueClient.close();
 };
 
 
-const sendMessage = async () => {
+const publishMessage = async () => {
 	const queueClient = sbClient.createTopicClient(topicName);
 	const sender = queueClient.createSender();
 
@@ -101,8 +101,8 @@ main().catch(err => {
 
 async function main() {
 	try {
-		// Sending a message to ensure that there is atleast one message in the main queue
-		await sendMessage();
+		// Publish a message to ensure that there is atleast one message in the main queue
+		await publishMessage();
 		await receiveMessageToDLQ();
 		// await processDeadletterMessageQueue();
 	} finally {

@@ -34,17 +34,16 @@ module.exports = {
 			connectionString: process.env.CONNECTION_STRING_SERVICE_BUS,
 		},
 		subscriptions: {
-			noordhoffSubscription: {
-				topic: 'guarreo-laura.systemic-bus-filters-poc.particle.created',
-				subscription: 'guarreo-laura.filters-poc.particle.noordhoff',
-			},
-			plantynSubscription: {
-				topic: 'guarreo-laura.systemic-bus-filters-poc.particle.created',
-				subscription: 'guarreo-laura.filters-poc.particle.plantyn',
-			},
 			defaultSubscription: {
 				topic: 'guarreo-laura.systemic-bus-filters-poc.particle.created',
 				subscription: 'guarreo-laura.filters-poc.particle.default',
+				// errorHandling: {
+				// 	strategy: 'exponentialBackoff', // 'retry' || 'deadLetter'
+				// 	options: { // for 'exponentialBackoff' option only
+				// 		attempts: 5,
+				// 		measure: 'minutes',
+				// 	},
+				// },
 			},
 		},
 		publications: {
