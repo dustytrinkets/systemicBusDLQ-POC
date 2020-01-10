@@ -1,4 +1,4 @@
-# systemicBusDLQ-POC
+# systemic azure bus error handling policies POC
 
 A POC for investigating the error handling policies on **systemic-azure-bus** for **Azure Service Bus**.
 
